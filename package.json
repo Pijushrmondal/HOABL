@@ -5,7 +5,7 @@
   "main": "src/app.ts",
   "scripts": {
     "build": "rimraf ./build && tsc",
-    "development": "nodemon",
+    "dev": "nodemon",
     "prestart": "npm run build",
     "start": "node build/app.js",
     "start:dev": "ts-node -r tsconfig-paths/register ./src",
