@@ -1,9 +1,9 @@
 {
   "watch": ["src", "**/*.ts"],
   "events": {
-    "start": "cls"
+    "start": "clear"
   },
   "ext": ".ts,.js",
   "ignore": [],
-  "exec": "ts-node ./src/app.ts"
+  "exec": "ts-node ./src/App.ts"
 }

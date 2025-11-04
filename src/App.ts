@@ -1,33 +1,33 @@
 import express from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import morgan from "morgan";
+
 const app = express();
-const basePort = 4000;
-
-const consumer = {
-  target: `http://localhost:${basePort + 1}`,
-  changeOrigin: true,
-};
-
 const PORT = 9000;
+const target = "http://localhost:4001";
 
-// Morgan Middleware for logging
 app.use(morgan("dev"));
 
 app.get("/", (req, res) => {
-  res.json(`common gate way run at port ${PORT}`);
+  res.send("Gateway running ✅");
 });
 
-// Proxy paths based on some criteria, e.g., path starts with /api1 goes to port 3000
+// Proxy main consumer API - preserve full path
+// When Express matches /consumer/api, it strips the prefix before passing to middleware
+// So we need to add it back with pathRewrite
 app.use(
-  "/consumer",
-  (req, res, next) => {
-    // console.log(req);
-    next();
-  },
-  createProxyMiddleware(consumer),
+  "/consumer/api",
+  createProxyMiddleware({
+    target,
+    changeOrigin: true,
+    // Add back the /consumer/api prefix that Express strips
+    // path will be like "/docs" or "/docs/swagger-ui.css" after Express strips the prefix
+    pathRewrite: (path, req) => {
+      return `/consumer/api${path}`;
+    },
+  }),
 );
 
 app.listen(PORT, () => {
-  console.log(`Proxy server is running on http://localhost:${PORT}`);
+  console.log(`Gateway running on http://localhost:${PORT}`);
 });
