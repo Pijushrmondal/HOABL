@@ -2,25 +2,10 @@ import express from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import morgan from "morgan";
 const app = express();
-const basePort = 8000;
+const basePort = 4000;
 
-const options8002 = {
-  target: `http://localhost:${basePort + 2}`,
-  changeOrigin: true,
-};
-
-const options8003 = {
-  target: `http://localhost:${basePort + 3}`,
-  changeOrigin: true,
-};
-
-const options8008 = {
-  target: `http://localhost:${basePort + 8}`,
-  changeOrigin: true,
-};
-
-const options8005 = {
-  target: `http://localhost:${basePort + 5}`,
+const consumer = {
+  target: `http://localhost:${basePort + 1}`,
   changeOrigin: true,
 };
 
@@ -35,33 +20,13 @@ app.get("/", (req, res) => {
 
 // Proxy paths based on some criteria, e.g., path starts with /api1 goes to port 3000
 app.use(
-  "/hoabl-admin",
+  "/consumer",
   (req, res, next) => {
     // console.log(req);
     next();
   },
-  createProxyMiddleware(options8002),
+  createProxyMiddleware(consumer),
 );
-app.use(
-  "/hoabl-customer",
-  (req, res, next) => {
-    // console.log(req.headers);
-    next();
-  },
-  createProxyMiddleware(options8003),
-);
-
-app.use(
-  "/hoabl-customer-temp",
-  (req, res, next) => {
-    // console.log(req.headers);
-    next();
-  },
-  createProxyMiddleware(options8008),
-);
-app.use("/hoabl-payment", createProxyMiddleware(options8005));
-
-// Start the proxy server on port 5000
 
 app.listen(PORT, () => {
   console.log(`Proxy server is running on http://localhost:${PORT}`);
