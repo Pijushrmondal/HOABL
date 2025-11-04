@@ -5,17 +5,11 @@ import morgan from "morgan";
 const app = express();
 const PORT = 9000;
 const servicePort = 4000;
-const consumerTarget = `http://localhost:${servicePort + 1}`;
 const consumerService = `/consumer/api`;
+const consumerTarget = `http://localhost:${servicePort + 1}`;
 
-const adminTarget = `http://localhost:${servicePort + 1}`;
-const adminService = `/consumer/api`;
-
-const consumerOnboardTarget = `http://localhost:${servicePort + 1}`;
-const consumerOnboardService = `/consumer/api`;
-
-const fleetPayoutTarget = `http://localhost:${servicePort + 1}`;
-const fleetPayoutService = `/consumer/api`;
+const consumerOnboardTarget = `http://localhost:${servicePort + 2}`;
+const consumerOnboardService = `/consumer/onboarding/api`;
 
 app.use(morgan("dev"));
 
@@ -35,63 +29,12 @@ app.use(
 );
 
 app.use(
-  consumerService,
+  consumerOnboardService,
   createProxyMiddleware({
-    target: consumerTarget,
+    target: consumerOnboardTarget,
     changeOrigin: true,
     pathRewrite: (path, req) => {
-      return `${consumerService}${path}`;
-    },
-  }),
-);
-
-app.use(
-  consumerService,
-  createProxyMiddleware({
-    target: consumerTarget,
-    changeOrigin: true,
-    pathRewrite: (path, req) => {
-      return `${consumerService}${path}`;
-    },
-  }),
-);
-app.use(
-  consumerService,
-  createProxyMiddleware({
-    target: consumerTarget,
-    changeOrigin: true,
-    pathRewrite: (path, req) => {
-      return `${consumerService}${path}`;
-    },
-  }),
-);
-app.use(
-  consumerService,
-  createProxyMiddleware({
-    target: consumerTarget,
-    changeOrigin: true,
-    pathRewrite: (path, req) => {
-      return `${consumerService}${path}`;
-    },
-  }),
-);
-app.use(
-  consumerService,
-  createProxyMiddleware({
-    target: consumerTarget,
-    changeOrigin: true,
-    pathRewrite: (path, req) => {
-      return `${consumerService}${path}`;
-    },
-  }),
-);
-app.use(
-  consumerService,
-  createProxyMiddleware({
-    target: consumerTarget,
-    changeOrigin: true,
-    pathRewrite: (path, req) => {
-      return `${consumerService}${path}`;
+      return `${consumerOnboardService}${path}`;
     },
   }),
 );
