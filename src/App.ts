@@ -8,14 +8,43 @@ const servicePort = 4000;
 const consumerService = `/consumer/api`;
 const consumerTarget = `http://localhost:${servicePort + 1}`;
 
-const consumerOnboardTarget = `http://localhost:${servicePort + 2}`;
+const consumerOnboardTarget = `http://localhost:${servicePort + 9}`;
 const consumerOnboardService = `/consumer/onboarding/api`;
+
+const adminService = `/fleet/api`;
+const adminTarget = `http://localhost:${servicePort + 2}`;
 
 app.use(morgan("dev"));
 
 app.get("/", (req, res) => {
   res.send("Gateway running ✅");
 });
+
+// app.use(express.json(), (req, res, next) => {
+//   // if (req.originalUrl.includes("security-deposit-due")) {
+//   const token = req.headers.authorization || req.headers["x-access-token"];
+//   console.log("------ Incoming API Call ------");
+//   console.log("URL:", req.originalUrl);
+//   console.log("Method:", req.method);
+//   console.log("Token:", token);
+//   console.log("Query Params:", req.query);
+//   console.log("Request Body:", req.body);
+//   console.log("------------------------------");
+//   // console.log(req);
+//   // }
+//   next();
+// });
+
+app.use(
+  adminService,
+  createProxyMiddleware({
+    target: adminTarget,
+    changeOrigin: true,
+    pathRewrite: (path, req) => {
+      return `${adminService}${path}`;
+    },
+  }),
+);
 
 app.use(
   consumerService,
@@ -27,7 +56,6 @@ app.use(
     },
   }),
 );
-
 app.use(
   consumerOnboardService,
   createProxyMiddleware({

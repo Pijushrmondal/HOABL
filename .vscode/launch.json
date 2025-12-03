@@ -5,10 +5,13 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "nodemon",
-      "name": "btf-fm-dev",
+      "type": "node",
       "request": "launch",
-      "type": "node-terminal"
+      "name": "Launch Program",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/src/app.ts",
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "outFiles": ["${workspaceFolder}/build/**/*.js"]
     }
   ]
 }
