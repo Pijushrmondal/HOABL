@@ -38,6 +38,17 @@ app.get("/", (req, res) => {
 //   next();
 // });
 
+function reqLogs(req: any) {
+  const token = req.headers.authorization || req.headers["x-access-token"];
+  console.log("------ Incoming API Call ------");
+  console.log("URL:", req.originalUrl);
+  console.log("Method:", req.method);
+  console.log("Token:", token);
+  console.log("Query Params:", req.query);
+  console.log("Request Body:", req.body);
+  console.log("------------------------------");
+}
+
 app.use(
   adminService,
   createProxyMiddleware({
