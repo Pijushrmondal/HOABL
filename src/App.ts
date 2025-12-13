@@ -14,6 +14,9 @@ const consumerOnboardService = `/consumer/onboarding/api`;
 const adminService = `/fleet/api`;
 const adminTarget = `http://localhost:${servicePort + 2}`;
 
+const opsConsumerService = `/ops-consumer/api`;
+const opsConsumerTarget = `http://localhost:${servicePort + 5}`;
+
 app.use(morgan("dev"));
 
 app.get("/", (req, res) => {
@@ -63,6 +66,17 @@ app.use(
     changeOrigin: true,
     pathRewrite: (path, req) => {
       return `${consumerOnboardService}${path}`;
+    },
+  }),
+);
+
+app.use(
+  opsConsumerService,
+  createProxyMiddleware({
+    target: opsConsumerTarget,
+    changeOrigin: true,
+    pathRewrite: (path, req) => {
+      return `${opsConsumerService}${path}`;
     },
   }),
 );
